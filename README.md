@@ -1,73 +1,181 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Chat Application Based on ChatGPT - Monta AI Backend Task
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a NestJS-based backend system that uses the GPT-4 API to power a secure, session-managed chat application. The system includes user authentication with JWT and refresh tokens, and it stores user sessions and chat histories in MongoDB.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
+- [Description](#description)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [Environment Variables](#environment-variables)
+- [Deployment](#deployment)
+- [Security](#security)
+- [License](#license)
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project leverages the NestJS framework to create a robust backend system for a chat application. The backend interfaces with the GPT-3.5 API to provide intelligent chat responses. Users can register, log in, and maintain chat sessions, with JWT-based authentication and refresh tokens ensuring secure access.
+
+## Technologies
+
+- **NestJS**: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+- **MongoDB**: A NoSQL database for storing user data and chat sessions.
+- **JWT (JSON Web Tokens)**: Used for secure user authentication and authorization.
+- **Passport.js**: Middleware for authentication, integrated with JWT for stateless sessions.
 
 ## Installation
 
+To set up the project locally, follow these steps:
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-repo/chat-app-backend.git
+   cd chat-app-backend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**:
+   Create a `.env` file in the root directory and add the following variables:
+   ```plaintext
+   OPENAI_API_KEY=your_openai_api_key
+   JWT_SECRET=your_jwt_secret
+   JWT_REFRESH_SECRET=your_jwt_refresh_secret
+   MONGO_URI=mongodb://localhost/nest
+   ```
+
+## Running the Application
+
+To start the application, use the following command:
+
 ```bash
-$ npm install
+npm run start:dev
 ```
 
-## Running the app
+The application will run on `http://localhost:3000`.
 
-```bash
-# development
-$ npm run start
+## Environment Variables
 
-# watch mode
-$ npm run start:dev
+Ensure you have the following environment variables set up in your `.env` file:
 
-# production mode
-$ npm run start:prod
+- `OPENAI_API_KEY`: Your OpenAI API key.
+- `JWT_SECRET`: Secret key for signing JWT access tokens.
+- `JWT_REFRESH_SECRET`: Secret key for signing JWT refresh tokens.
+- `MONGO_URI`: URI for connecting to your MongoDB database.
+
+## Deployment
+
+### Deploying to DigitalOcean App Platform
+
+1. **Create a DigitalOcean account** if you don't have one already.
+
+2. **Create a new app** in the DigitalOcean App Platform.
+
+3. **Connect your GitHub repository** containing this project to the DigitalOcean App Platform.
+
+4. **Configure build and run commands**:
+   - **Build Command**: `npm install`
+   - **Run Command**: `npm run start:prod`
+
+5. **Set environment variables** in the DigitalOcean dashboard:
+   - `OPENAI_API_KEY`
+   - `JWT_SECRET`
+   - `JWT_REFRESH_SECRET`
+   - `MONGO_URI`
+
+6. **Deploy the application**. DigitalOcean will automatically build and deploy your app from the connected repository.
+
+## Security
+
+### Authentication and Authorization
+
+The backend uses JWT for authentication and authorization. Here's how we secured the backend:
+
+- **JWT Access Tokens**: Used for verifying user identity and granting access to protected endpoints.
+- **JWT Refresh Tokens**: Used to issue new access tokens without requiring the user to log in again.
+
+### Guards
+
+We implemented custom guards to protect endpoints:
+
+- **LocalAuthGuard**: Used for login, validating the user's credentials.
+- **JwtAuthGuard**: Protects routes by verifying the JWT access token.
+- **JwtRefreshGuard**: Protects the refresh token endpoint, validating the JWT refresh token.
+
+### Example Guards Implementation
+
+**`local-auth.guard.ts`**:
+```typescript
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class LocalAuthGuard extends AuthGuard('local') {
+  constructor() {
+    super({ session: false });
+  }
+}
 ```
 
-## Test
+**`jwt-auth.guard.ts`**:
+```typescript
+import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Observable } from 'rxjs';
 
-```bash
-# unit tests
-$ npm run test
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    return super.canActivate(context);
+  }
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+  handleRequest(err, user, info) {
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+    return user;
+  }
+}
 ```
 
-## Support
+**`jwt-refresh.guard.ts`**:
+```typescript
+import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Observable } from 'rxjs';
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+@Injectable()
+export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    return super.canActivate(context);
+  }
 
-## Stay in touch
+  handleRequest(err, user, info) {
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+    return user;
+  }
+}
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Why NestJS?
+
+NestJS was chosen for this project due to its following advantages:
+
+- **Modularity**: Allows for a modular architecture, making it easier to manage and scale the application.
+- **TypeScript Support**: Provides strong typing and modern JavaScript features.
+- **Dependency Injection**: Simplifies the management of dependencies.
+- **Built-in Support for Authentication and Authorization**: Seamlessly integrates with Passport.js for handling authentication.
+- **Robust CLI**: Provides a robust CLI to create and manage various aspects of the application.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the MIT License.
+
+---
+
+This `README.md` provides a detailed overview of the project, installation steps, running instructions, deployment strategy, security details, and the rationale for using NestJS.
