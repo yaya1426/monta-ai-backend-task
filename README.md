@@ -74,32 +74,19 @@ The application will run on `http://localhost:3000`.
 
 Ensure you have the following environment variables set up in your `.env` file:
 
-- `OPENAI_API_KEY`: Your OpenAI API key.
-- `JWT_SECRET`: Secret key for signing JWT access tokens.
-- `JWT_REFRESH_SECRET`: Secret key for signing JWT refresh tokens.
-- `MONGO_URI`: URI for connecting to your MongoDB database.
+- JWT_SECRET=your_jwt_secret
+- JWT_REFRESH_SECRET=your_jwt_refresh_secret
+- MONGO_URI=mongodb://admin:admin@localhost:27017/?authSource=admin
+- OPENAI_API_KEY=your_openai_api_key
+- OPENAI_MAX_TOKENS=150
+- OPENAI_MODEL=gpt-4o
+- THROTTLE_TTL=60000
+- THROTTLE_LIMIT=10
 
 ## Deployment
 
-### Deploying to DigitalOcean App Platform
-
-1. **Create a DigitalOcean account** if you don't have one already.
-
-2. **Create a new app** in the DigitalOcean App Platform.
-
-3. **Connect your GitHub repository** containing this project to the DigitalOcean App Platform.
-
-4. **Configure build and run commands**:
-   - **Build Command**: `npm install`
-   - **Run Command**: `npm run start:prod`
-
-5. **Set environment variables** in the DigitalOcean dashboard:
-   - `OPENAI_API_KEY`
-   - `JWT_SECRET`
-   - `JWT_REFRESH_SECRET`
-   - `MONGO_URI`
-
-6. **Deploy the application**. DigitalOcean will automatically build and deploy your app from the connected repository.
+The project has been deployed to DigitalOcean App Platform, as I already have an account there. 
+But in anycase the solution is Dockerized so it can run anywhere :)
 
 ## Security
 
