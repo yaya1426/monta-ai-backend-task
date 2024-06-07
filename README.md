@@ -17,6 +17,15 @@ This is a NestJS-based backend system that uses the GPT-4o API to power a secure
 
 This project leverages the NestJS framework to create a robust backend system for a chat application. The backend interfaces with the GPT-4o API to provide intelligent chat responses. Users can register, log in, and maintain chat sessions, with JWT-based authentication and refresh tokens ensuring secure access.
 
+## Technologies
+
+- **NestJS**: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+- **MongoDB**: A NoSQL database for storing user data and chat sessions.
+- **JWT (JSON Web Tokens)**: Used for secure user authentication and authorization.
+- **Passport.js**: Middleware for authentication, integrated with JWT for stateless sessions.
+- **Rate Limiter**: Built-in @Throttler for rate limiting requests that try to abuse the server.
+
+
 ## Why NestJS?
 
 NestJS was chosen for this project due to its following advantages:
@@ -26,14 +35,6 @@ NestJS was chosen for this project due to its following advantages:
 - **Dependency Injection**: Simplifies the management of dependencies.
 - **Built-in Support for Authentication and Authorization**: Seamlessly integrates with Passport.js for handling authentication.
 - **Robust CLI**: Provides a robust CLI to create and manage various aspects of the application.
-
-## Technologies
-
-- **NestJS**: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
-- **MongoDB**: A NoSQL database for storing user data and chat sessions.
-- **JWT (JSON Web Tokens)**: Used for secure user authentication and authorization.
-- **Passport.js**: Middleware for authentication, integrated with JWT for stateless sessions.
-- **Rate Limiter**: Built-in @Throttler for rate limiting requests that try to abuse the server.
 
 ## Installation
 
