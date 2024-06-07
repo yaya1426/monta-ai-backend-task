@@ -22,6 +22,7 @@ This project leverages the NestJS framework to create a robust backend system fo
 - **MongoDB**: A NoSQL database for storing user data and chat sessions.
 - **JWT (JSON Web Tokens)**: Used for secure user authentication and authorization.
 - **Passport.js**: Middleware for authentication, integrated with JWT for stateless sessions.
+- **Rate Limiter**: Built-in @Throttler for rate limiting requests that try to abuse the server.
 
 ## Installation
 
@@ -175,7 +176,3 @@ NestJS was chosen for this project due to its following advantages:
 ## License
 
 This project is licensed under the MIT License.
-
----
-
-This `README.md` provides a detailed overview of the project, installation steps, running instructions, deployment strategy, security details, and the rationale for using NestJS.
