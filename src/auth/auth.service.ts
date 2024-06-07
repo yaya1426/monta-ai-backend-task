@@ -34,11 +34,14 @@ export class AuthService {
       const user = await this.userModel.findById(id).populate('chatSessions');
 
       if (!user) {
-        throw new NotFoundException('User not found');
+        throw new NotFoundException();
       }
 
       return user;
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('User not found');
+      }
       throw new InternalServerErrorException('Failed to find user');
     }
   }

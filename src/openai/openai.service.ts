@@ -8,7 +8,7 @@ import { Model, Types } from 'mongoose';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
 import { ChatSession } from './schema/chat-session.schema';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { ChatCompletionMessageParam } from 'openai/resources';
 
 @Injectable()
@@ -50,7 +50,6 @@ export class OpenAIService {
         .lean();
       return sessions;
     } catch (error) {
-      console.error(error);
       throw new InternalServerErrorException('Failed to get user sessions');
     }
   }
@@ -67,7 +66,6 @@ export class OpenAIService {
       if (error instanceof NotFoundException) {
         session = await this.createSession(userId);
       } else {
-        console.error(error);
         throw new InternalServerErrorException(
           'Failed to get or create session',
         );
@@ -85,20 +83,19 @@ export class OpenAIService {
         ),
       });
 
-      const botResponse = completion.choices[0].message.content.trim();
+      const botResponse = completion?.choices?.[0].message.content.trim();
       session.history.push({ user: prompt, bot: botResponse });
       await session.save();
 
       return { sessionId: session._id.toString(), response: botResponse };
     } catch (error) {
-      console.error(error);
       throw new InternalServerErrorException(
         'Failed to communicate with OpenAI API',
       );
     }
   }
 
-  private generatePromptWithContext(
+  generatePromptWithContext(
     history: { user: string; bot: string }[],
     newPrompt: string,
   ) {
@@ -115,14 +112,13 @@ export class OpenAIService {
       results.push({ role: 'user', content: newPrompt });
       return results;
     } catch (error) {
-      console.error('Failed to generate prompt with context', error);
       throw new InternalServerErrorException(
         'Failed to generate prompt with context',
       );
     }
   }
 
-  private async createSession(userId: string): Promise<ChatSession> {
+  async createSession(userId: string): Promise<ChatSession> {
     try {
       const user = await this.authService.findById(userId);
       if (!user) {

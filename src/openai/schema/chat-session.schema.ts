@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { User } from 'src/auth/schema/user.schema';
+import { User } from '../../auth/schema/user.schema';
 
 @Schema()
 export class ChatSession extends Document {

@@ -6,9 +6,10 @@ import {
   Request,
   Get,
   Query,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { OpenAIService } from './openai.service';
-import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
+import { JwtAuthGuard } from '../auth/guard/jwt.guard';
 
 @Controller('openai')
 export class OpenAIController {
@@ -22,12 +23,22 @@ export class OpenAIController {
     @Request() req,
   ) {
     const userId = req.user.userId;
-    return this.openaiService.getResponse(message, sessionId, userId);
+    try {
+      return await this.openaiService.getResponse(message, sessionId, userId);
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to send message');
+    }
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('sessions')
   async getUserSessions(@Request() req) {
-    return this.openaiService.getUserSessions(req.user.userId);
+    try {
+      return await this.openaiService.getUserSessions(req.user.userId);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Failed to retrieve user sessions',
+      );
+    }
   }
 }
