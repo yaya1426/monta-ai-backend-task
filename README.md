@@ -54,10 +54,16 @@ To set up the project locally, follow these steps:
 3. **Set up environment variables**:
    Create a `.env` file in the root directory and add the following variables:
    ```plaintext
-   OPENAI_API_KEY=your_openai_api_key
    JWT_SECRET=your_jwt_secret
    JWT_REFRESH_SECRET=your_jwt_refresh_secret
-   MONGO_URI=mongodb://localhost/nest
+   MONGO_URI=mongodb://admin:admin@localhost:27017/?authSource=admin
+   
+   OPENAI_API_KEY=your_openai_api_key
+   OPENAI_MAX_TOKENS=150
+   OPENAI_MODEL=gpt-4o
+   
+   THROTTLE_TTL=60000
+   THROTTLE_LIMIT=10
    ```
 
 ## Running the Application
@@ -69,19 +75,6 @@ npm run start:dev
 ```
 
 The application will run on `http://localhost:3000`.
-
-## Environment Variables
-
-Ensure you have the following environment variables set up in your `.env` file:
-
-- JWT_SECRET=your_jwt_secret
-- JWT_REFRESH_SECRET=your_jwt_refresh_secret
-- MONGO_URI=mongodb://admin:admin@localhost:27017/?authSource=admin
-- OPENAI_API_KEY=your_openai_api_key
-- OPENAI_MAX_TOKENS=150
-- OPENAI_MODEL=gpt-4o
-- THROTTLE_TTL=60000
-- THROTTLE_LIMIT=10
 
 ## Deployment
 
