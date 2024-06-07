@@ -12,6 +12,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
 import { Model } from 'mongoose';
 import { ConfigService } from '@nestjs/config';
+import { UserPayload } from './dto/user-payload.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,10 +31,12 @@ export class AuthService {
 
   async findById(id: string) {
     try {
-      const user = this.userModel.findById(id);
+      const user = await this.userModel.findById(id).populate('chatSessions');
+
       if (!user) {
         throw new NotFoundException('User not found');
       }
+
       return user;
     } catch (error) {
       throw new InternalServerErrorException('Failed to find user');
@@ -43,16 +46,19 @@ export class AuthService {
   async validateUser(username: string, pass: string): Promise<any> {
     try {
       const user = await this.userModel.findOne({ username });
-      if (user && (await bcrypt.compare(pass, user.password))) {
-        return { username: user.username };
+      const validatePassword = await bcrypt.compare(pass, user.password);
+
+      if (user && validatePassword) {
+        return { userId: user._id.toString(), username: user.username };
       }
+
       return null;
     } catch (error) {
       throw new InternalServerErrorException('Failed to validate user');
     }
   }
 
-  async login(user: User) {
+  async login(user: UserPayload) {
     try {
       return this.generateTokens(user);
     } catch (error) {
@@ -65,11 +71,14 @@ export class AuthService {
       const payload = this.jwtService.verify(refreshToken, {
         secret: this.jwtRefreshSecret,
       });
-      const user = await this.userModel.findById(payload.sub);
+      const user = await this.userModel.findById(payload.userId);
       if (!user) {
         throw new UnauthorizedException('Invalid refresh token');
       }
-      return this.generateTokens(user);
+      return this.generateTokens({
+        username: user.username,
+        userId: user._id.toString(),
+      });
     } catch (e) {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -92,7 +101,10 @@ export class AuthService {
       });
       await user.save();
 
-      return this.generateTokens(user);
+      return this.generateTokens({
+        username: user.username,
+        userId: user._id.toString(),
+      });
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
@@ -101,14 +113,13 @@ export class AuthService {
     }
   }
 
-  private generateTokens(user: User) {
-    const payload = { username: user.username, sub: user._id };
+  private generateTokens(user: UserPayload) {
     return {
-      access_token: this.jwtService.sign(payload, {
+      access_token: this.jwtService.sign(user, {
         secret: this.jwtSecret,
         expiresIn: '15m',
       }),
-      refresh_token: this.jwtService.sign(payload, {
+      refresh_token: this.jwtService.sign(user, {
         secret: this.jwtRefreshSecret,
         expiresIn: '7d',
       }),
