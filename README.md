@@ -174,3 +174,12 @@ export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {
   }
 }
 ```
+### Rate Limiting
+
+#### Importance of Rate Limiting
+
+Rate limiting is crucial for preventing abuse and ensuring the stability and performance of the backend system. It helps protect the application from excessive requests that could lead to denial of service or degraded performance.
+
+#### Usage of @nestjs/throttler
+
+We have integrated @nestjs/throttler to handle rate limiting in our NestJS application. This ensures that each user is limited to a certain number of requests within a specified time frame.
