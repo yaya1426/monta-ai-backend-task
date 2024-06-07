@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { OpenAIModule } from './openai/openai.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -29,5 +30,6 @@ import { APP_GUARD } from '@nestjs/core';
       useClass: ThrottlerGuard,
     },
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
