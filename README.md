@@ -8,7 +8,6 @@ This is a NestJS-based backend system that uses the GPT-4o API to power a secure
 - [Why Nest.js](#why-nestjs)
 - [Installation](#installation)
 - [Running the Application](#running-the-application)
-- [Environment Variables](#environment-variables)
 - [Deployment](#deployment)
 - [Security](#security)
 - [License](#license)
