@@ -1,4 +1,13 @@
-import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  Body,
+  InternalServerErrorException,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guard/local.guard';
 import { RegisterUserDto } from './dto/register-user.dto';
@@ -11,17 +20,35 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
-    return this.authService.login(req.user);
+    try {
+      return await this.authService.login(req.user);
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to login');
+    }
   }
 
   @Post('register')
   async register(@Body() registerUserDto: RegisterUserDto) {
-    return this.authService.register(registerUserDto);
+    try {
+      return await this.authService.register(registerUserDto);
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Failed to register');
+    }
   }
 
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   async refresh(@Request() req) {
-    return this.authService.refresh(req.user.refresh_token);
+    try {
+      return await this.authService.refresh(req.user.refresh_token);
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Failed to refresh token');
+    }
   }
 }
