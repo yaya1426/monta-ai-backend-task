@@ -57,7 +57,7 @@ export class AuthService {
 
       return null;
     } catch (error) {
-      throw new InternalServerErrorException('Failed to validate user');
+      throw new BadRequestException('Failed to validate user');
     }
   }
 

@@ -23,6 +23,9 @@ export class AuthController {
     try {
       return await this.authService.login(req.user);
     } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
       throw new InternalServerErrorException('Failed to login');
     }
   }
